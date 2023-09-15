@@ -17,7 +17,7 @@ app.message('hello', async ({ message, say }) => { // função anônima de callb
 
 app.message('fala', async ({ message, say }) => { // função anônima de callback, com um argumento com duas propriedades
     // say() sends a message to the channel where the event was triggered
-    console.log('Falaaa'); // imprime no terminal
+    console.log('Chora'); // imprime no terminal
 });
 
 (async () => {
