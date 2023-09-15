@@ -1,0 +1,8 @@
+services:
+  web:
+    build:
+      context: .
+    volumes:
+      - .:/myapp
+    ports:
+      - "3000:3000"
