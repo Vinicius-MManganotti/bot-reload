@@ -6,7 +6,25 @@ const app = new App({
     signingSecret: process.env.SLACK_SIGNING_SECRET,
     socketMode: true, // add this
     appToken: process.env.SLACK_APP_TOKEN, // add this
-    port: process.env.PORT || 3000
+    port: process.env.PORT || 3000,
+    customRoutes: [
+        {
+          path: '/health-check',
+          method: ['GET'],
+          handler: (req, res) => {
+            res.writeHead(200);
+            res.end(`Things are going just fine at ${req.headers.host}!`);
+          },
+        },
+        {
+            path: '/circle-ci',
+            method: ['POST'],
+            handler: (req, res) => {
+                res.writeHead(200);
+                res.end('CircleCI cai aqui'); // saber se uma nova imagem foi construída
+            },
+        },
+    ]    
 });
 
 // Listens to incoming messages that contain "hello". Método message da classe app.
@@ -17,7 +35,7 @@ app.message('hello', async ({ message, say }) => { // função anônima de callb
 
 app.message('fala', async ({ message, say }) => { // função anônima de callback, com um argumento com duas propriedades
     // say() sends a message to the channel where the event was triggered
-    console.log('Chora'); // imprime no terminal
+    console.log('Salveee'); // imprime no terminal
 });
 
 (async () => {
