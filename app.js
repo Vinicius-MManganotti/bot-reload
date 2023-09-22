@@ -1,3 +1,4 @@
+const { parse } = require('querystring');
 const { App } = require('@slack/bolt');
 
 // Initializes your app in socket mode with your app token and signing secret. Classe/instância App declarada na variável app
@@ -20,9 +21,17 @@ const app = new App({
             path: '/circle-ci',
             method: ['POST'],
             handler: (req, res) => {
+              let body = '';
+              req.on('data', buffer => {
+                body += decodeURIComponent(buffer.toString());
+              });
+              req.on('end', async () => {
+                const result = parse(body);
+                console.log('result', result.pipeline.vcs.branch);
                 res.writeHead(200);
-                res.end('CircleCI cai aqui'); // saber se uma nova imagem foi construída
-            },
+                res.end();
+              });
+            }
         },
     ]    
 });
