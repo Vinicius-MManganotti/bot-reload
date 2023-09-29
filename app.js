@@ -1,5 +1,5 @@
-const { parse } = require('querystring');
 const { App } = require('@slack/bolt');
+const { exec } = require('child_process');
 
 // Initializes your app in socket mode with your app token and signing secret. Classe/instância App declarada na variável app
 const app = new App({
@@ -26,7 +26,15 @@ const app = new App({
                 body += decodeURIComponent(buffer.toString());
               });
               req.on('end', async () => {
-                const result = parse(body);
+                const result = JSON.parse(body);
+                exec('ls -l', (error, stdout, stderr) => {
+                  if (error) {
+                    console.error(`Error: ${error.message}`);
+                    return;
+                  }
+                  console.log(`stdout: ${stdout}`);
+                  console.error(`stderr: ${stderr}`);
+                });                
                 console.log('result', result.pipeline.vcs.branch);
                 res.writeHead(200);
                 res.end();
