@@ -27,12 +27,14 @@ const app = new App({
               });
               req.on('end', async () => {
                 const result = JSON.parse(body);
-                exec('ls -l', (error, stdout, stderr) => {
+                exec(`kubectl get pods --all-namespaces -o=jsonpath='{range .items[*]}{"\\n"}{.metadata.name}{","}{.metadata.namespace}{","}{range .spec.containers[*]}{.image}{end}{end}' | grep "${result.pipeline.vcs.branch}"`, (error, stdout, stderr) => {
                   if (error) {
                     console.error(`Error: ${error.message}`);
                     return;
                   }
-                  console.log(`stdout: ${stdout}`);
+                  const ambiente = stdout.split(",")[1];
+                  const nomeSobrenome = ambiente.split("-").slice(1,3)
+                  console.log(`${nomeSobrenome[0]}+'.'+${nomeSobrenome[1]}+"@rdstation.com"`)
                   console.error(`stderr: ${stderr}`);
                 });                
                 console.log('result', result.pipeline.vcs.branch);
@@ -58,6 +60,6 @@ app.message('fala', async ({ message, say }) => { // função anônima de callba
 (async () => {
   // Start your app
   await app.start(); // start: método disponível da classe App (olhar doc do slackbot)
-
+  app.client.users.lookupByEmail()
   console.log('⚡️ Bolt app is running!');
 })();
