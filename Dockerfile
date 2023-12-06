@@ -13,5 +13,10 @@ RUN apt-get install apt-transport-https ca-certificates gnupg curl -y
 RUN echo "deb https://packages.cloud.google.com/apt cloud-sdk main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
 RUN curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
 RUN apt-get update && apt-get install google-cloud-cli -y
+RUN apt-get install google-cloud-sdk-gke-gcloud-auth-plugin
+# Autenticação da conta
+COPY config /root/.config/gcloud
+# Conexão ao cluster do paas, para executar comandos no bot
+RUN gcloud container clusters get-credentials gke-usc1-rd-sre-stg-01 --region us-central1 --project rd-sre-stg-01
 
 CMD ["nodemon", "app.js"]

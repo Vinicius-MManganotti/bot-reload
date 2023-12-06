@@ -9,6 +9,7 @@
   "author": "Guilerme e Manga",
   "license": "ISC",
   "dependencies": {
-    "@slack/bolt": "^3.13.3"
+    "@slack/bolt": "^3.13.3",
+    "axios": "^1.6.2"
   }
 }
